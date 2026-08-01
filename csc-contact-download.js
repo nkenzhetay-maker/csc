@@ -44,12 +44,11 @@
     if (!msg) return;
     var formEl = msg.closest('form');
     if (!formEl || !formEl.parentNode) return;
-    // Formun bulunduğu kartın üstüne yerleştir (bulunamazsa formun hemen üstüne)
-    var anchor = formEl;
-    var p = formEl.parentElement, hops = 0;
-    while (p && hops < 4) {
-      if (p.className && /(rounded|bg-white|card)/.test(p.className)) { anchor = p; break; }
-      p = p.parentElement; hops++;
+    // Tam genişlik: iki sütunlu grid'in üstüne yerleştir (yoksa formun kartının üstüne)
+    var anchor = (formEl.closest && formEl.closest('[class*="grid-cols"]')) || null;
+    if (!anchor) {
+      anchor = formEl; var p = formEl.parentElement, hops = 0;
+      while (p && hops < 4) { if (p.className && /(rounded|bg-white|card)/.test(p.className)) { anchor = p; break; } p = p.parentElement; hops++; }
     }
     if (!anchor.parentNode) anchor = formEl;
     anchor.parentNode.insertBefore(build(), anchor);
