@@ -1,0 +1,181 @@
+@import "tailwindcss";
+
+@theme {
+  /* Colors - Yeni Palet */
+  --color-deep-sea: #0A5C8E;
+  --color-primary-blue: #0A5C8E;
+  --color-secondary-blue: #2C9CD4;
+  --color-pharma-green: #00A86B;
+  --color-ice-bg: #F4F7FC;
+  --color-white: #FFFFFF;
+  --color-dark-text: #1E2A3E;
+  --color-light-text: #FFFFFF;
+  --color-muted-text: #5A6A7E;
+  --color-border-subtle: #D0D8E4;
+  --color-border-hover: #2C9CD4;
+
+  /* Typography */
+  --font-display: 'Montserrat', sans-serif;
+  --font-body: 'Inter', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  /* Spacing */
+  --spacing-section: 100px;
+  --spacing-content: 1200px;
+  --spacing-card: 36px;
+
+  /* Border Radius */
+  --radius-card: 16px;
+  --radius-button: 8px;
+  --radius-inner: 12px;
+}
+
+/* Base styles */
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-dark-text);
+  background-color: var(--color-ice-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Font utilities */
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+.font-mono {
+  font-family: var(--font-mono);
+}
+
+/* Animation keyframes */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+@keyframes scroll-cue {
+  0%, 100% { opacity: 0; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(8px); }
+}
+
+@keyframes live-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+@keyframes map-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0, 168, 107, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(0, 168, 107, 0); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes border-glow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+.animate-scroll-cue {
+  animation: scroll-cue 1.5s ease-in-out infinite;
+}
+
+.animate-live-pulse {
+  animation: live-pulse 2s ease-in-out infinite;
+}
+
+.animate-map-pulse {
+  animation: map-pulse 2s ease-in-out infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 250ms ease-out, border-color 250ms ease-out, box-shadow 250ms ease-out;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-hover);
+  box-shadow: 0 8px 30px rgba(10, 92, 142, 0.08);
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-ice-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-subtle);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-muted-text);
+}
+
+/* Selection */
+::selection {
+  background-color: rgba(44, 156, 212, 0.2);
+  color: var(--color-dark-text);
+}
+
+/* Modal backdrop */
+.modal-backdrop {
+  background: rgba(10, 92, 142, 0.6);
+  backdrop-filter: blur(8px);
+}
