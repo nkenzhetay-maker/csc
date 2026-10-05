@@ -1,24 +1,18 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HealthWorkerModal from '../../components/HealthWorkerModal';
 import { Search, ChevronDown, X, Package, Box } from 'lucide-react';
-import { realIlacProducts, tedaviAlanlari, formlar, ruhsatSahipleri } from '../../data/ilacDatabase';
+import { realIlacProducts, tedaviAlanlari, formlar, type IlacProduct } from '../../data/ilacDatabase';
+import { fetchIlaclar } from '../../lib/publicData';
 import { useTranslation } from '../../contexts/LanguageContext';
 import { pick, ilacUI, categoryMenu, crumb, areaLabels, formLabels, labelFor, allOrSelf } from '../../data/productI18n';
 
-/* Extract unique active ingredients from real products */
-const etkinMaddelerSet = new Set<string>();
-realIlacProducts.forEach(p => {
-  if (p.etkinMadde && p.etkinMadde !== 'N/A' && p.etkinMadde !== '-') {
-    etkinMaddelerSet.add(p.etkinMadde);
-  }
-});
-const etkinMaddelerList = ['Tümü', ...Array.from(etkinMaddelerSet).sort()];
-
-/* Add "All" prefix for dropdowns */
-const allTedaviAlanlari = tedaviAlanlari;
-const allFormlar = formlar;
-const allRuhsatSahipleri = ruhsatSahipleri;
+/* Filtre seçenekleri ürün listesinden türetilir (panelden eklenen yeni değerler de görünsün) */
+const uniq = (base: string[], values: string[]) => {
+  const set = new Set(base.filter(v => v !== 'Tümü'));
+  values.forEach(v => { if (v && v !== '-' && v !== 'N/A') set.add(v); });
+  return ['Tümü', ...Array.from(set).sort((a, b) => a.localeCompare(b, 'tr'))];
+};
 
 function Dropdown({ label, placeholder, options, value, onChange, optionLabel }: { label: string; placeholder?: string; options: string[]; value: string; onChange: (v: string) => void; optionLabel?: (v: string) => string }) {
   const [open, setOpen] = useState(false);
@@ -60,6 +54,18 @@ export default function IlacPage() {
   const [form, setForm] = useState('Form');
   const [searchQuery, setSearchQuery] = useState('');
   const [ruhsatSahibi, setRuhsatSahibi] = useState('Ruhsat Sahibi');
+  const [products, setProducts] = useState<IlacProduct[]>(realIlacProducts);
+
+  useEffect(() => {
+    let alive = true;
+    fetchIlaclar().then(rows => { if (alive && rows && rows.length) setProducts(rows); });
+    return () => { alive = false; };
+  }, []);
+
+  const etkinMaddelerList = useMemo(() => uniq([], products.map(p => p.etkinMadde)), [products]);
+  const allTedaviAlanlari = useMemo(() => uniq(tedaviAlanlari, products.map(p => p.tedaviAlani)), [products]);
+  const allFormlar = useMemo(() => uniq(formlar, products.map(p => p.form)), [products]);
+  const allRuhsatSahipleri = useMemo(() => uniq([], products.map(p => p.ruhsatSahibi)), [products]);
 
   useState(() => { if (sessionStorage.getItem('csc-health-approved') === 'true') setApproved(true); else setShowModal(true); });
   const handleConfirm = () => { setApproved(true); sessionStorage.setItem('csc-health-approved', 'true'); };
@@ -70,7 +76,7 @@ export default function IlacPage() {
   };
 
   const filtered = useMemo(() => {
-    let r = [...realIlacProducts];
+    let r = [...products];
     if (tedaviAlani !== 'Tedavi Alanı' && tedaviAlani !== 'Tümü') r = r.filter(p => p.tedaviAlani === tedaviAlani);
     if (etkinMadde !== 'Etkin Madde' && etkinMadde !== 'Tümü') r = r.filter(p => p.etkinMadde.toLowerCase().includes(etkinMadde.toLowerCase()));
     if (form !== 'Form' && form !== 'Tümü') r = r.filter(p => p.form === form);
@@ -81,7 +87,7 @@ export default function IlacPage() {
     );
     if (ruhsatSahibi !== 'Ruhsat Sahibi' && ruhsatSahibi !== 'Tümü') r = r.filter(p => p.ruhsatSahibi === ruhsatSahibi);
     return r;
-  }, [tedaviAlani, etkinMadde, form, searchQuery, ruhsatSahibi]);
+  }, [products, tedaviAlani, etkinMadde, form, searchQuery, ruhsatSahibi]);
 
   const hasActive = (tedaviAlani !== 'Tedavi Alanı' && tedaviAlani !== 'Tümü') ||
     (etkinMadde !== 'Etkin Madde' && etkinMadde !== 'Tümü') ||
@@ -106,10 +112,10 @@ export default function IlacPage() {
           <h1 className="font-display font-bold text-[#1E2A3E] text-2xl md:text-3xl">{ilacTitle}</h1>
           <div className="flex items-center gap-3">
             <span className="bg-[#00A86B] text-white font-body text-xs px-3 py-1.5 rounded-full flex items-center gap-1">
-              <Package size={12} /> {realIlacProducts.length} {ui.unitProduct}
+              <Package size={12} /> {products.length} {ui.unitProduct}
             </span>
             <span className="bg-[#0A5C8E] text-white font-body text-xs px-3 py-1.5 rounded-full">
-              {new Set(realIlacProducts.map(p => p.ruhsatSahibi).filter(r => r && r !== '-')).size} {ui.unitManufacturer}
+              {new Set(products.map(p => p.ruhsatSahibi).filter(r => r && r !== '-')).size} {ui.unitManufacturer}
             </span>
             <span className="bg-[#2C9CD4] text-white font-body text-xs px-3 py-1.5 rounded-full">
               {allTedaviAlanlari.length - 1} {ui.unitArea}

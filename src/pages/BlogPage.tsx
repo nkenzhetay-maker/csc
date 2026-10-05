@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from '../contexts/LanguageContext';
 import { TrendingUp, FileText, Globe, ArrowRight, Calendar, X } from 'lucide-react';
 import { pick } from '../data/productI18n';
-import { blogEntries } from '../data/blogContent';
+import { blogEntries as fallbackEntries, type BlogEntry } from '../data/blogContent';
+import { fetchBlog } from '../lib/publicData';
 
 const categories = [
   { key: 'blog.category.all', value: 'all', icon: <Globe size={16} /> },
@@ -15,6 +16,13 @@ export default function BlogPage() {
   const { t, language } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
   const [expandedPost, setExpandedPost] = useState<number | null>(null);
+  const [blogEntries, setBlogEntries] = useState<BlogEntry[]>(fallbackEntries);
+
+  useEffect(() => {
+    let alive = true;
+    fetchBlog().then(rows => { if (alive && rows && rows.length) setBlogEntries(rows); });
+    return () => { alive = false; };
+  }, []);
 
   const filtered = activeCategory === 'all' ? blogEntries : blogEntries.filter((p) => p.category === activeCategory);
 
