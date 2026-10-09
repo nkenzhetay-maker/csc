@@ -8,7 +8,7 @@ const ILAC_COLUMNS = 'id, ad, etkin_madde, atc_kodu, ruhsat_sahibi, barkod, teda
 
 type IlacRow = {
   id: number; ad: string; etkin_madde: string; atc_kodu: string; ruhsat_sahibi: string;
-  barkod: string; tedavi_alani: string; form: string; stok: number;
+  barkod: string; tedavi_alani: string; form: string; stok: number | null;
 };
 type BlogRow = {
   id: number; kategori: BlogEntry['category']; tarih: string; okuma_suresi: number; gorsel: string;

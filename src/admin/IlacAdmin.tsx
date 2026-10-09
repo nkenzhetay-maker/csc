@@ -5,7 +5,7 @@ import { Button, Field, Input, Modal, Notice, Select } from './ui';
 
 type Ilac = {
   id: number; ad: string; etkin_madde: string; atc_kodu: string; ruhsat_sahibi: string; barkod: string;
-  tedavi_alani: string; form: string; stok: number; aktif: boolean; fiyat: number | null;
+  tedavi_alani: string; form: string; stok: number | null; aktif: boolean; fiyat: number | null;
 };
 type Draft = Omit<Ilac, 'id' | 'fiyat' | 'stok'> & { id?: number; stok: string; fiyat: string };
 
@@ -66,7 +66,7 @@ export default function IlacAdmin() {
     return { tedavi: set('tedavi_alani'), form: set('form'), ruhsat: set('ruhsat_sahibi') };
   }, [items]);
 
-  const openEdit = (i: Ilac) => setEditing({ ...i, stok: String(i.stok), fiyat: i.fiyat === null ? '' : String(i.fiyat) });
+  const openEdit = (i: Ilac) => setEditing({ ...i, stok: i.stok === null ? '' : String(i.stok), fiyat: i.fiyat === null ? '' : String(i.fiyat) });
 
   const onSaved = (saved: Ilac, isNew: boolean) => {
     setItems(prev => isNew ? [...prev, saved] : prev.map(p => p.id === saved.id ? saved : p));
@@ -133,7 +133,7 @@ export default function IlacAdmin() {
                 <td className="px-3 py-2.5 text-[#5A6A7E]">{i.etkin_madde}</td>
                 <td className="px-3 py-2.5 text-[#5A6A7E]">{i.ruhsat_sahibi}</td>
                 <td className="px-3 py-2.5 font-mono text-xs text-[#5A6A7E]">{i.barkod}</td>
-                <td className="px-3 py-2.5 text-right tabular-nums">{i.stok.toLocaleString('tr-TR')}</td>
+                <td className="px-3 py-2.5 text-right tabular-nums">{i.stok === null ? '—' : i.stok.toLocaleString('tr-TR')}</td>
                 <td className="px-3 py-2.5 text-right tabular-nums">{fmtPrice(i.fiyat)}</td>
                 <td className="px-3 py-2.5">
                   <span className={`px-2 py-0.5 rounded-full text-xs ${i.aktif ? 'bg-[#E6F6EF] text-[#0B6B47]' : 'bg-[#EEF2F7] text-[#5A6A7E]'}`}>{i.aktif ? 'Sitede' : 'Gizli'}</span>
@@ -171,10 +171,10 @@ function IlacForm({ draft, options, onClose, onSaved, onDeleted }: {
 
   const save = async (e: React.FormEvent) => {
     e.preventDefault();
-    const stok = Number(d.stok);
+    const stok = d.stok.trim() === '' ? null : Number(d.stok);
     const fiyat = d.fiyat.trim() === '' ? null : Number(d.fiyat.replace(',', '.'));
     if (!d.ad.trim()) { setError('Ürün adı zorunlu.'); return; }
-    if (!Number.isInteger(stok) || stok < 0) { setError('Stok 0 veya pozitif tam sayı olmalı.'); return; }
+    if (stok !== null && (!Number.isInteger(stok) || stok < 0)) { setError('Stok 0 veya pozitif tam sayı olmalı (bilinmiyorsa boş bırakın).'); return; }
     if (fiyat !== null && (!Number.isFinite(fiyat) || fiyat < 0)) { setError('Fiyat geçerli bir sayı olmalı.'); return; }
     setBusy(true); setError('');
     const row = {
@@ -221,7 +221,7 @@ function IlacForm({ draft, options, onClose, onSaved, onDeleted }: {
           <Field label="Barkod"><Input value={d.barkod} onChange={e => set('barkod', e.target.value)} maxLength={40} inputMode="numeric" /></Field>
           <Field label="Tedavi alanı"><Input list="dl-tedavi" value={d.tedavi_alani} onChange={e => set('tedavi_alani', e.target.value)} maxLength={80} /></Field>
           <Field label="Form"><Input list="dl-form" value={d.form} onChange={e => set('form', e.target.value)} maxLength={60} /></Field>
-          <Field label="Stok"><Input type="number" min={0} step={1} value={d.stok} onChange={e => set('stok', e.target.value)} /></Field>
+          <Field label="Stok" hint="Bilinmiyorsa boş bırakın (sitede “—” görünür)."><Input type="number" min={0} step={1} value={d.stok} onChange={e => set('stok', e.target.value)} /></Field>
           <Field label="Fiyat (gizli)" hint="Sitede gösterilmez; yalnızca bu panelde görünür. Boş bırakılabilir.">
             <Input value={d.fiyat} onChange={e => set('fiyat', e.target.value)} inputMode="decimal" placeholder="örn. 12,50" />
           </Field>

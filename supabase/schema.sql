@@ -37,7 +37,7 @@ create table if not exists public.ilaclar (
   barkod        text not null default '-' check (char_length(barkod) <= 40),
   tedavi_alani  text not null default 'Diğer' check (char_length(tedavi_alani) <= 80),
   form          text not null default 'Diğer' check (char_length(form) <= 60),
-  stok          integer not null default 0 check (stok >= 0),
+  stok          integer check (stok is null or stok >= 0),  -- null = stok bilgisi yok
   aktif         boolean not null default true,
   created_at    timestamptz not null default now(),
   updated_at    timestamptz not null default now()

@@ -181,9 +181,13 @@ export default function IlacPage() {
                     <td className="px-4 py-3">{product.ruhsatSahibi && product.ruhsatSahibi !== '-' ? <span className="font-body text-xs font-medium text-[#0A5C8E] bg-[#0A5C8E]/10 px-2 py-1 rounded">{product.ruhsatSahibi}</span> : <span className="font-mono text-xs text-[#5A6A7E]">-</span>}</td>
                     <td className="px-4 py-3 font-mono text-xs text-[#5A6A7E]">{product.barkod !== '-' ? product.barkod : '-'}</td>
                     <td className="px-4 py-3 text-right">
-                      <span className={`font-mono text-xs px-2 py-1 rounded ${product.stok > 100 ? 'bg-[#00A86B]/10 text-[#00A86B]' : product.stok > 0 ? 'bg-[#E8A010]/10 text-[#E8A010]' : 'bg-[#E63946]/10 text-[#E63946]'}`}>
-                        {product.stok.toLocaleString()}
-                      </span>
+                      {product.stok === null ? (
+                        <span className="font-mono text-xs text-[#5A6A7E]">—</span>
+                      ) : (
+                        <span className={`font-mono text-xs px-2 py-1 rounded ${product.stok > 100 ? 'bg-[#00A86B]/10 text-[#00A86B]' : product.stok > 0 ? 'bg-[#E8A010]/10 text-[#E8A010]' : 'bg-[#E63946]/10 text-[#E63946]'}`}>
+                          {product.stok.toLocaleString()}
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))}
