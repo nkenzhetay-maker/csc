@@ -177,6 +177,8 @@ export const areaLabels: Record<string, Record<Lang, string>> = {
   'Diğer': { en: 'Other', tr: 'Diğer', ru: 'Прочие', kz: 'Басқа', az: 'Digər' },
   'Diğer Tablet Formları': { en: 'Other Tablet Forms', tr: 'Diğer Tablet Formları', ru: 'Прочие таблетированные формы', kz: 'Басқа таблетка түрлері', az: 'Digər tablet formaları' },
   'Göz İlaçları': { en: 'Ophthalmic', tr: 'Göz İlaçları', ru: 'Офтальмологические', kz: 'Көз дәрілері', az: 'Göz dərmanları' },
+  'İmmünoloji': { en: 'Immunology', tr: 'İmmünoloji', ru: 'Иммунология', kz: 'Иммунология', az: 'İmmunologiya' },
+  'Onkoloji': { en: 'Oncology', tr: 'Onkoloji', ru: 'Онкология', kz: 'Онкология', az: 'Onkologiya' },
   'Kardiyovasküler Sistem': { en: 'Cardiovascular', tr: 'Kardiyovasküler Sistem', ru: 'Сердечно-сосудистые', kz: 'Жүрек-қантамыр', az: 'Ürək-damar' },
   'Kortikosteroidler': { en: 'Corticosteroids', tr: 'Kortikosteroidler', ru: 'Кортикостероиды', kz: 'Кортикостероидтер', az: 'Kortikosteroidlər' },
   'Kulak İlaçları': { en: 'Otic (Ear)', tr: 'Kulak İlaçları', ru: 'Ушные', kz: 'Құлақ дәрілері', az: 'Qulaq dərmanları' },
