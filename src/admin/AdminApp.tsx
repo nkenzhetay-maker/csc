@@ -9,6 +9,12 @@ import BlogAdmin from './BlogAdmin';
 type Tab = 'ilac' | 'blog' | 'talep';
 // Supabase davet / şifre sıfırlama bağlantısı ile gelindiyse önce yeni şifre belirletilir.
 const cameForPassword = /type=(recovery|invite)/.test(window.location.hash);
+// Kullanıcı adıyla giriş: Supabase e-posta ister, bu yüzden kullanıcı adı karşılık gelen e-postaya çevrilir.
+const USERNAMES: Record<string, string> = { superadmin: 'info@csc-tr.com' };
+const toEmail = (login: string) => {
+  const v = login.trim().toLocaleLowerCase('tr').replace(/\s+/g, '');
+  return v.includes('@') ? v : USERNAMES[v] ?? v;
+};
 
 export default function AdminApp() {
   const [session, setSession] = useState<Session | null>(null);
@@ -90,7 +96,7 @@ function Center({ children }: { children: React.ReactNode }) {
 }
 
 function Login() {
-  const [email, setEmail] = useState('');
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
@@ -98,9 +104,9 @@ function Login() {
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true); setError('');
-    const { error } = await supabase!.auth.signInWithPassword({ email: email.trim(), password });
+    const { error } = await supabase!.auth.signInWithPassword({ email: toEmail(login), password });
     setBusy(false);
-    if (error) setError('E-posta veya şifre hatalı.');
+    if (error) setError('Kullanıcı adı veya şifre hatalı.');
   };
 
   return (
@@ -111,7 +117,7 @@ function Login() {
           <h1 className="font-display font-bold text-xl text-[#1E2A3E]">CSC Yönetim Paneli</h1>
         </div>
         {error && <Notice kind="error">{error}</Notice>}
-        <Field label="E-posta"><Input type="email" autoComplete="username" required value={email} onChange={e => setEmail(e.target.value)} /></Field>
+        <Field label="Kullanıcı adı"><Input type="text" autoComplete="username" autoCapitalize="none" spellCheck={false} required value={login} onChange={e => setLogin(e.target.value)} /></Field>
         <Field label="Şifre"><Input type="password" autoComplete="current-password" required value={password} onChange={e => setPassword(e.target.value)} /></Field>
         <Button type="submit" disabled={busy} className="w-full">{busy ? 'Giriş yapılıyor…' : 'Giriş yap'}</Button>
       </form>
