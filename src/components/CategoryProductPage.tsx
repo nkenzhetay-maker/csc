@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../lib/i18nRouter';
 import { Pill, HeartPulse, Syringe, Baby, Stethoscope, FlaskConical } from 'lucide-react';
 import { useTranslation } from '../contexts/LanguageContext';
 import { pick, categoryMenu, crumb } from '../data/productI18n';

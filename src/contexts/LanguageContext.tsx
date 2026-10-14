@@ -1,4 +1,6 @@
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useCallback, type ReactNode } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { splitLang, withLang, HREFLANG } from '../lib/i18nRouter';
 
 type Language = 'en' | 'tr' | 'ru' | 'kz' | 'az';
 
@@ -1198,17 +1200,33 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguageState] = useState<Language>(() => {
-    localStorage.removeItem('csc-language-v3');
-    const saved = localStorage.getItem('csc-language-v4');
-    return (saved as Language) || 'en';
-  });
+  // Dil adresten okunur (/ru/..., /tr/...; önek yoksa İngilizce). Tek doğruluk kaynağı URL'dir.
+  const { pathname, search, hash } = useLocation();
+  const navigate = useNavigate();
+  const { lang: language, rest } = splitLang(pathname);
+
+  // İlk ziyarette önceki dil tercihi varsa (kök adreste) o dile yönlendir. Botlarda localStorage boş → yönlendirme yok.
+  useEffect(() => {
+    try {
+      localStorage.removeItem('csc-language-v3');
+      const saved = localStorage.getItem('csc-language-v4') as Language | null;
+      if (language === 'en' && saved && saved !== 'en' && saved in translations) {
+        navigate(withLang(rest, saved) + search + hash, { replace: true });
+      }
+    } catch { /* depolama kapalı olabilir */ }
+    // yalnızca ilk yüklemede
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.lang = HREFLANG[language];
+    try { localStorage.setItem('csc-language-v4', language); } catch { /* yoksay */ }
+  }, [language]);
 
   const setLanguage = useCallback((lang: Language) => {
-    setLanguageState(lang);
-    localStorage.setItem('csc-language-v4', lang);
-    document.documentElement.lang = lang === 'tr' ? 'tr' : lang === 'ru' ? 'ru' : lang === 'kz' ? 'kk' : lang === 'az' ? 'az' : 'en';
-  }, []);
+    try { localStorage.setItem('csc-language-v4', lang); } catch { /* yoksay */ }
+    navigate(withLang(rest, lang) + search + hash);
+  }, [navigate, rest, search, hash]);
 
   const t = useCallback(
     (key: string): string => {

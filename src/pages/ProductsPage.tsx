@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../lib/i18nRouter';
 import { useTranslation } from '../contexts/LanguageContext';
 import HealthWorkerModal from '../components/HealthWorkerModal';
 import { Pill, HeartPulse, Syringe, Baby, Stethoscope, FlaskConical, ArrowRight } from 'lucide-react';

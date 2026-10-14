@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from '../../lib/i18nRouter';
 import { useTranslation } from '../../contexts/LanguageContext';
 
 interface Particle {

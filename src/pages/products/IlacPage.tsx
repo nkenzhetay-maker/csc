@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../../lib/i18nRouter';
 import HealthWorkerModal from '../../components/HealthWorkerModal';
 import { Search, ChevronDown, X, Package, Box } from 'lucide-react';
 import { realIlacProducts, tedaviAlanlari, formlar, type IlacProduct } from '../../data/ilacDatabase';

@@ -1,1 +1,7 @@
-/admin  /admin.html  200
+/admin            /admin.html      200
+/blog/*           /app-shell.html  200
+/tr/blog/*        /app-shell.html  200
+/ru/blog/*        /app-shell.html  200
+/kz/blog/*        /app-shell.html  200
+/az/blog/*        /app-shell.html  200
+/*                /app-shell.html  404

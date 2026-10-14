@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from '../lib/i18nRouter';
 import { useTranslation } from '../contexts/LanguageContext';
 import { Globe, MessageCircle, Mail, MapPin, Phone } from 'lucide-react';
 

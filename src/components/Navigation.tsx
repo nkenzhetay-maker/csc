@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, splitLang } from '../lib/i18nRouter';
 import { useTranslation } from '../contexts/LanguageContext';
 import { Menu, X, MessageCircle, ChevronDown, Globe } from 'lucide-react';
 
@@ -38,7 +38,7 @@ export default function Navigation() {
   const [scrolled, setScrolled] = useState(false);
   const [langOpen, setLangOpen] = useState(false);
   const langRef = useRef<HTMLDivElement>(null);
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => splitLang(location.pathname).rest === path;
 
   /* Close mobile menu & lang dropdown on route change */
   useEffect(() => {

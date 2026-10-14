@@ -11,8 +11,8 @@
     kz: { title: 'Дәрі сұрау формасы', desc: 'Дәрі сұрау үшін төмендегі форманы жүктеп алыңыз, толтырыңыз, мөр мен қолыңызды қойып, info@csc-tr.com мекенжайына жіберіңіз.', btn: 'Форманы жүктеу (Word)' },
     az: { title: 'Dərman Sifariş Formu', desc: 'Dərman sifariş etmək üçün aşağıdakı formu yükləyin, doldurun, möhür və imza qoyub info@csc-tr.com ünvanına göndərin.', btn: 'Formu Yüklə (Word)' },
   };
-  function lang() { try { var l = localStorage.getItem(KEY); return TXT[l] ? l : 'en'; } catch (e) { return 'en'; } }
-  function onContact() { return (location.hash || '').indexOf('iletisim') > -1; }
+  function lang() { var m = location.pathname.match(/^\/(tr|ru|kz|az)(\/|$)/); if (m) return m[1]; if (/^#\//.test(location.hash)) { try { var l = localStorage.getItem(KEY); return TXT[l] ? l : 'en'; } catch (e) { return 'en'; } } return 'en'; }
+  function onContact() { return /\/iletisim\/?$/.test(location.pathname) || (location.hash || '').indexOf('iletisim') > -1; }
   function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 
   function build() {

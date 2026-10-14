@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../contexts/LanguageContext';
-import { TrendingUp, FileText, Globe, ArrowRight, Calendar, X } from 'lucide-react';
+import { TrendingUp, FileText, Globe, ArrowRight, Calendar } from 'lucide-react';
+import { Link } from '../lib/i18nRouter';
+import { blogSlug } from './BlogPostPage';
 import { pick } from '../data/productI18n';
 import { blogEntries as fallbackEntries, type BlogEntry } from '../data/blogContent';
 import { fetchBlog } from '../lib/publicData';
@@ -15,7 +17,6 @@ const categories = [
 export default function BlogPage() {
   const { t, language } = useTranslation();
   const [activeCategory, setActiveCategory] = useState('all');
-  const [expandedPost, setExpandedPost] = useState<number | null>(null);
   const [blogEntries, setBlogEntries] = useState<BlogEntry[]>(fallbackEntries);
 
   useEffect(() => {
@@ -50,10 +51,10 @@ export default function BlogPage() {
         {/* Blog Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filtered.map((post) => {
-            const isExpanded = expandedPost === post.id;
             const text = pick(post.t, language);
             return (
-              <div key={post.id} className="bg-white border border-[#D0D8E4] rounded-2xl overflow-hidden card-hover animate-fade-in-up flex flex-col">
+              <Link key={post.id} to={`/blog/${blogSlug(post)}`}
+                className="group bg-white border border-[#D0D8E4] rounded-2xl overflow-hidden card-hover animate-fade-in-up flex flex-col hover:border-[#0A5C8E] transition-colors">
                 <div className="h-[160px] relative overflow-hidden">
                   <img src={post.image} alt={text.title} className="w-full h-full object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
@@ -66,33 +67,13 @@ export default function BlogPage() {
                     <Calendar size={12} />
                     <span className="font-body text-xs">{post.date} &bull; {post.readTime} {t('blog.readtime') || 'dk'}</span>
                   </div>
-                  <h3 className="font-body font-semibold text-[15px] text-[#1E2A3E] leading-snug mb-2 line-clamp-2">{text.title}</h3>
+                  <h2 className="font-body font-semibold text-[15px] text-[#1E2A3E] leading-snug mb-2 line-clamp-2">{text.title}</h2>
                   <p className="font-body text-[13px] text-[#5A6A7E] leading-relaxed line-clamp-3 mb-3 flex-1">{text.excerpt}</p>
-                  <button
-                    onClick={() => setExpandedPost(isExpanded ? null : post.id)}
-                    className="inline-flex items-center gap-1 font-body font-medium text-sm text-[#0A5C8E] hover:text-[#00A86B] transition-colors mt-auto"
-                  >
-                    {isExpanded ? (
-                      <><X size={14} /> {t('blog.close') || 'Kapat'}</>
-                    ) : (
-                      <>{t('blog.read')} <ArrowRight size={14} /></>
-                    )}
-                  </button>
+                  <span className="inline-flex items-center gap-1 font-body font-medium text-sm text-[#0A5C8E] group-hover:text-[#00A86B] transition-colors mt-auto">
+                    {t('blog.read')} <ArrowRight size={14} />
+                  </span>
                 </div>
-
-                {/* Expanded Full Content */}
-                {isExpanded && (
-                  <div className="border-t border-[#D0D8E4]/50 bg-[#F4F7FC]/30 px-5 py-5 animate-fade-in-up">
-                    <div className="space-y-3">
-                      {text.content.map((paragraph, pIdx) => (
-                        <p key={pIdx} className="font-body text-[14px] text-[#5A6A7E] leading-relaxed">
-                          {paragraph}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+              </Link>
             );
           })}
         </div>

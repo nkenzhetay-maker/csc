@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from '../contexts/LanguageContext';
-import { Link } from 'react-router-dom';
+import { Link } from '../lib/i18nRouter';
 import { Cookie, X } from 'lucide-react';
 
 export default function CookieConsent() {

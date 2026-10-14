@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from '../lib/i18nRouter';
 import { useTranslation } from '../contexts/LanguageContext';
 import { Pill, HeartPulse, Syringe, Baby, Stethoscope, FlaskConical, ArrowRight } from 'lucide-react';
 
