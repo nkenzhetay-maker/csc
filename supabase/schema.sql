@@ -104,3 +104,15 @@ create policy "admin blog siler" on public.blog_yazilari
   for delete to authenticated using ((select public.is_admin()));
 
 create index if not exists blog_yazilari_tarih_idx on public.blog_yazilari (tarih desc);
+
+-- ---------- Admin yetkisi: info@csc-tr.com hesabı oluşturulunca otomatik admin olur ----------
+create or replace function public.grant_admin_for_csc() returns trigger language plpgsql security definer set search_path = '' as $$
+begin
+  if lower(new.email) = 'info@csc-tr.com' then
+    insert into public.admins (user_id, email) values (new.id, new.email) on conflict (user_id) do nothing;
+  end if;
+  return new;
+end; $$;
+revoke all on function public.grant_admin_for_csc() from public, anon, authenticated;
+drop trigger if exists csc_admin_on_signup on auth.users;
+create trigger csc_admin_on_signup after insert on auth.users for each row execute function public.grant_admin_for_csc();
