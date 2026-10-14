@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import type { Session } from '@supabase/supabase-js';
-import { Pill, Newspaper, Inbox, LogOut, ExternalLink, Lock } from 'lucide-react';
+import { Pill, Newspaper, Inbox, LogOut, Lock } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { Button, Field, Input, Notice } from './ui';
 import IlacAdmin from './IlacAdmin';
 import BlogAdmin from './BlogAdmin';
+import TalepAdmin from './TalepAdmin';
 
 type Tab = 'ilac' | 'blog' | 'talep';
 // Supabase davet / şifre sıfırlama bağlantısı ile gelindiyse önce yeni şifre belirletilir.
@@ -21,7 +22,7 @@ export default function AdminApp() {
   const [ready, setReady] = useState(false);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [needPassword, setNeedPassword] = useState(cameForPassword);
-  const [tab, setTab] = useState<Tab>('ilac');
+  const [tab, setTab] = useState<Tab>('talep');
 
   useEffect(() => {
     if (!supabase) { setReady(true); return; }
@@ -55,9 +56,9 @@ export default function AdminApp() {
   }
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
+    { id: 'talep', label: 'Talepler', icon: <Inbox size={16} /> },
     { id: 'ilac', label: 'İlaçlar', icon: <Pill size={16} /> },
     { id: 'blog', label: 'Blog', icon: <Newspaper size={16} /> },
-    { id: 'talep', label: 'Talepler', icon: <Inbox size={16} /> },
   ];
 
   return (
@@ -85,7 +86,7 @@ export default function AdminApp() {
       <main className="max-w-[1280px] mx-auto px-4 md:px-6 py-6">
         {tab === 'ilac' && <IlacAdmin />}
         {tab === 'blog' && <BlogAdmin />}
-        {tab === 'talep' && <Talepler />}
+        {tab === 'talep' && <TalepAdmin />}
       </main>
     </div>
   );
@@ -151,27 +152,5 @@ function SetPassword({ onDone }: { onDone: () => void }) {
         <Button type="submit" disabled={busy} className="w-full">{busy ? 'Kaydediliyor…' : 'Şifreyi kaydet'}</Button>
       </form>
     </Center>
-  );
-}
-
-function Talepler() {
-  return (
-    <div className="max-w-[720px] bg-white border border-[#D0D8E4] rounded-2xl p-6">
-      <h2 className="font-display font-bold text-xl text-[#1E2A3E] mb-2">İletişim talepleri</h2>
-      <p className="font-body text-sm text-[#5A6A7E] leading-relaxed mb-4">
-        Sitedeki iletişim formundan gelen talepler <strong>info@csc-tr.com</strong> adresine e-posta olarak iletilir
-        ve Netlify Forms'ta saklanır. Tüm talepleri oradan görebilir, dışa aktarabilir veya silebilirsiniz.
-      </p>
-      <div className="flex flex-wrap gap-2">
-        <a href="https://app.netlify.com/projects/csc-tr/forms" target="_blank" rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-[#0A5C8E] text-white font-body text-sm font-medium hover:bg-[#084a73]">
-          Netlify Forms'u aç <ExternalLink size={14} />
-        </a>
-        <a href="https://spacemail.com/login" target="_blank" rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-[#D0D8E4] text-[#1E2A3E] font-body text-sm font-medium hover:border-[#0A5C8E]">
-          info@ gelen kutusu <ExternalLink size={14} />
-        </a>
-      </div>
-    </div>
   );
 }
