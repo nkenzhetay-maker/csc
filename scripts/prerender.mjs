@@ -70,7 +70,8 @@ async function render(ctx, url) {
       .replace(/;{2,}/g, ';').replace(/^\s*;|;\s*$/g, '').trim();
     return cleaned ? `style="${cleaned}"` : '';
   });
-  const out = url === '/' ? path.join(DIST, 'index.html') : path.join(DIST, url.slice(1), 'index.html');
+  // Netlify '/ru/blog' adresini '/ru/blog.html' dosyasından yönlendirmesiz sunar (klasör/index.html sonuna '/' ekletir)
+  const out = url === '/' ? path.join(DIST, 'index.html') : path.join(DIST, url.slice(1) + '.html');
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, html);
   return html.length;
