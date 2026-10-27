@@ -21,7 +21,7 @@ type Kalem = {
   id?: number; ilac_id: number | null; urun_adi: string; etkin_madde: string; form_doz: string; miktar: string;
   ihrac_ulkesi: string; aciklama: string; birim_fiyat: string;
 };
-type IlacRef = { id: number; ad: string; fiyat: number | null };
+type IlacRef = { id: number; ad: string; fiyat: number | null; para?: string };
 
 const DURUM: Record<Durum, { label: string; cls: string }> = {
   yeni: { label: 'Yeni', cls: 'bg-[#EAF3FA] text-[#0A5C8E]' },
@@ -400,15 +400,15 @@ function TalepModal({ talep, parsed, file, firmalar, talepler, onClose, onSaved 
   useEffect(() => {
     (async () => {
       const rows: IlacRef[] = [];
-      const prices = new Map<number, number>();
+      const prices = new Map<number, { fiyat: number; para: string }>();
       for (let from = 0; ; from += 1000) {
         const { data } = await supabase!.from('ilaclar').select('id, ad').order('ad').range(from, from + 999);
         rows.push(...((data ?? []) as IlacRef[]));
         if (!data || data.length < 1000) break;
       }
-      const { data: fp } = await supabase!.from('ilac_fiyatlari').select('ilac_id, fiyat');
-      (fp ?? []).forEach((p: { ilac_id: number; fiyat: number | null }) => { if (p.fiyat != null) prices.set(p.ilac_id, Number(p.fiyat)); });
-      const katalog = rows.map(r => ({ ...r, fiyat: prices.get(r.id) ?? null }));
+      const { data: fp } = await supabase!.from('ilac_fiyatlari').select('ilac_id, fiyat, para_birimi');
+      (fp ?? []).forEach((p: { ilac_id: number; fiyat: number | null; para_birimi?: string }) => { if (p.fiyat != null) prices.set(p.ilac_id, { fiyat: Number(p.fiyat), para: p.para_birimi ?? 'USD' }); });
+      const katalog = rows.map(r => ({ ...r, fiyat: prices.get(r.id)?.fiyat ?? null, para: prices.get(r.id)?.para }));
       setIlaclar(katalog);
       // Formdan gelen satırları kataloğa bağla
       if (!talep) setKalemler(prev => prev.map(k => k.ilac_id || !k.urun_adi ? k : { ...k, ilac_id: katalogEsle(k.urun_adi, katalog)?.id ?? null }));
@@ -569,7 +569,7 @@ function TalepModal({ talep, parsed, file, firmalar, talepler, onClose, onSaved 
                       <td className="p-1.5"><Input value={k.form_doz} onChange={e => setK(i, 'form_doz', e.target.value)} /></td>
                       <td className="p-1.5"><Input value={k.miktar} onChange={e => setK(i, 'miktar', e.target.value)} /></td>
                       <td className="p-1.5"><Input list="dl-ulke2" value={k.ihrac_ulkesi} onChange={e => setK(i, 'ihrac_ulkesi', e.target.value)} /></td>
-                      <td className="p-1.5 pt-3.5 tabular-nums text-[#5A6A7E]">{kat?.fiyat != null ? kat.fiyat.toFixed(2) : '—'}</td>
+                      <td className="p-1.5 pt-3.5 tabular-nums text-[#5A6A7E]">{kat?.fiyat != null ? `${kat.fiyat.toFixed(2)} ${kat.para ?? ''}` : '—'}</td>
                       <td className="p-1.5"><Input inputMode="decimal" value={k.birim_fiyat} onChange={e => setK(i, 'birim_fiyat', e.target.value)} placeholder={kat?.fiyat != null ? kat.fiyat.toFixed(2) : ''} /></td>
                       <td className="p-1.5 pt-2.5">
                         <button type="button" aria-label="Satırı sil" className="p-1 text-[#5A6A7E] hover:text-[#C0392B]"

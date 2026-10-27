@@ -63,6 +63,7 @@ create policy "admin ilaç siler" on public.ilaclar
 create table if not exists public.ilac_fiyatlari (
   ilac_id    bigint primary key references public.ilaclar(id) on delete cascade,
   fiyat      numeric(12,2) check (fiyat >= 0),
+  para_birimi text not null default 'USD' check (para_birimi in ('USD', 'EUR', 'TRY')),
   updated_at timestamptz not null default now()
 );
 drop trigger if exists ilac_fiyatlari_updated_at on public.ilac_fiyatlari;

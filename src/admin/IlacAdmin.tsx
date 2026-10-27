@@ -5,32 +5,33 @@ import { Button, Field, Input, Modal, Notice, Select } from './ui';
 
 type Ilac = {
   id: number; ad: string; etkin_madde: string; atc_kodu: string; ruhsat_sahibi: string; barkod: string;
-  tedavi_alani: string; form: string; stok: number | null; aktif: boolean; fiyat: number | null;
+  tedavi_alani: string; form: string; stok: number | null; aktif: boolean; fiyat: number | null; para_birimi: string;
 };
 type Draft = Omit<Ilac, 'id' | 'fiyat' | 'stok'> & { id?: number; stok: string; fiyat: string };
+const PARA = ['USD', 'EUR', 'TRY'];
 
 const PAGE = 50;
 const empty: Draft = {
   ad: '', etkin_madde: '-', atc_kodu: '-', ruhsat_sahibi: '-', barkod: '-', tedavi_alani: 'Diğer', form: 'Diğer',
-  stok: '0', aktif: true, fiyat: '',
+  stok: '0', aktif: true, fiyat: '', para_birimi: 'USD',
 };
 
 async function loadAll(): Promise<Ilac[]> {
-  const rows: Omit<Ilac, 'fiyat'>[] = [];
+  const rows: Omit<Ilac, 'fiyat' | 'para_birimi'>[] = [];
   for (let from = 0; ; from += 1000) {
     const { data, error } = await supabase!.from('ilaclar').select('*').order('id').range(from, from + 999);
     if (error) throw error;
     rows.push(...data);
     if (data.length < 1000) break;
   }
-  const prices = new Map<number, number | null>();
+  const prices = new Map<number, { fiyat: number | null; para: string }>();
   for (let from = 0; ; from += 1000) {
-    const { data, error } = await supabase!.from('ilac_fiyatlari').select('ilac_id, fiyat').range(from, from + 999);
+    const { data, error } = await supabase!.from('ilac_fiyatlari').select('ilac_id, fiyat, para_birimi').range(from, from + 999);
     if (error) throw error;
-    data.forEach(p => prices.set(p.ilac_id, p.fiyat === null ? null : Number(p.fiyat)));
+    data.forEach(p => prices.set(p.ilac_id, { fiyat: p.fiyat === null ? null : Number(p.fiyat), para: p.para_birimi ?? 'USD' }));
     if (data.length < 1000) break;
   }
-  return rows.map(r => ({ ...r, fiyat: prices.get(r.id) ?? null }));
+  return rows.map(r => ({ ...r, fiyat: prices.get(r.id)?.fiyat ?? null, para_birimi: prices.get(r.id)?.para ?? 'USD' }));
 }
 
 const norm = (s: string) => s.toLocaleLowerCase('tr');
@@ -134,7 +135,7 @@ export default function IlacAdmin() {
                 <td className="px-3 py-2.5 text-[#5A6A7E]">{i.ruhsat_sahibi}</td>
                 <td className="px-3 py-2.5 font-mono text-xs text-[#5A6A7E]">{i.barkod}</td>
                 <td className="px-3 py-2.5 text-right tabular-nums">{i.stok === null ? '—' : i.stok.toLocaleString('tr-TR')}</td>
-                <td className="px-3 py-2.5 text-right tabular-nums">{fmtPrice(i.fiyat)}</td>
+                <td className="px-3 py-2.5 text-right tabular-nums">{fmtPrice(i.fiyat)}{i.fiyat !== null && <span className="text-[#5A6A7E] text-xs ml-1">{i.para_birimi}</span>}</td>
                 <td className="px-3 py-2.5">
                   <span className={`px-2 py-0.5 rounded-full text-xs ${i.aktif ? 'bg-[#E6F6EF] text-[#0B6B47]' : 'bg-[#EEF2F7] text-[#5A6A7E]'}`}>{i.aktif ? 'Sitede' : 'Gizli'}</span>
                 </td>
@@ -188,10 +189,10 @@ function IlacForm({ draft, options, onClose, onSaved, onDeleted }: {
     const id = res.data.id as number;
     const pr = fiyat === null
       ? await supabase!.from('ilac_fiyatlari').delete().eq('ilac_id', id)
-      : await supabase!.from('ilac_fiyatlari').upsert({ ilac_id: id, fiyat });
+      : await supabase!.from('ilac_fiyatlari').upsert({ ilac_id: id, fiyat, para_birimi: d.para_birimi });
     setBusy(false);
     if (pr.error) { setError('Ürün kaydedildi ama fiyat kaydedilemedi: ' + pr.error.message); return; }
-    onSaved({ ...res.data, fiyat }, isNew);
+    onSaved({ ...res.data, fiyat, para_birimi: d.para_birimi }, isNew);
   };
 
   const remove = async () => {
@@ -223,7 +224,12 @@ function IlacForm({ draft, options, onClose, onSaved, onDeleted }: {
           <Field label="Form"><Input list="dl-form" value={d.form} onChange={e => set('form', e.target.value)} maxLength={60} /></Field>
           <Field label="Stok" hint="Bilinmiyorsa boş bırakın (sitede “—” görünür)."><Input type="number" min={0} step={1} value={d.stok} onChange={e => set('stok', e.target.value)} /></Field>
           <Field label="Fiyat (gizli)" hint="Sitede gösterilmez; yalnızca bu panelde görünür. Boş bırakılabilir.">
-            <Input value={d.fiyat} onChange={e => set('fiyat', e.target.value)} inputMode="decimal" placeholder="örn. 12,50" />
+            <div className="flex gap-2">
+              <Input value={d.fiyat} onChange={e => set('fiyat', e.target.value)} inputMode="decimal" placeholder="örn. 12,50" />
+              <Select value={d.para_birimi} onChange={e => set('para_birimi', e.target.value)} className="!w-24" aria-label="Para birimi">
+                {PARA.map(c => <option key={c}>{c}</option>)}
+              </Select>
+            </div>
           </Field>
         </div>
         <label className="flex items-center gap-2 font-body text-sm text-[#1E2A3E]">
