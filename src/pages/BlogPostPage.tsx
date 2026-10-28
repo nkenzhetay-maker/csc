@@ -5,6 +5,7 @@ import { useTranslation } from '../contexts/LanguageContext';
 import { pick } from '../data/productI18n';
 import { blogEntries as fallbackEntries, type BlogEntry } from '../data/blogContent';
 import { fetchBlog } from '../lib/publicData';
+import { blogImageCredits } from '../data/blogImageCredits';
 import { useSEO, absUrl, slugify } from '../lib/seo';
 import { SITE, HREFLANG, withLang } from '../lib/i18nRouter';
 import NotFound from './NotFound';
@@ -46,6 +47,7 @@ export default function BlogPostPage() {
   }, [post, slug, canonicalSlug, navigate]);
 
   const text = post ? pick(post.t, language) : null;
+  const credit = post?.image?.startsWith('/blog/') ? blogImageCredits[post.id] : undefined;
   const path = `/blog/${canonicalSlug}`;
   const url = absUrl(withLang(path, language));
   useSEO(post && text ? {
@@ -89,7 +91,14 @@ export default function BlogPostPage() {
           <Calendar size={14} /><time dateTime={post.date}>{post.date}</time><span>•</span><span>{post.readTime} {ui.min}</span>
         </div>
         <p className="font-body text-[17px] text-[#1E2A3E]/80 leading-relaxed mt-5">{text.excerpt}</p>
-        <img src={post.image} alt={text.title} className="w-full h-[240px] md:h-[320px] object-cover rounded-2xl mt-6" />
+        <figure className="mt-6">
+          <img src={post.image} alt={text.title} className="w-full h-[240px] md:h-[320px] object-cover rounded-2xl" />
+          {credit && (
+            <figcaption className="font-body text-[11px] text-[#5A6A7E] mt-2 text-right">
+              © <a href={credit.url} target="_blank" rel="noopener noreferrer" className="underline hover:text-[#00A86B]">{credit.author}</a> · {credit.license} · Wikimedia Commons
+            </figcaption>
+          )}
+        </figure>
 
         <div className="mt-8 space-y-5">
           {text.content.map((para, i) => {

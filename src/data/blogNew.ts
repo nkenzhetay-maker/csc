@@ -395,9 +395,9 @@ const newPost13: Record<Lang, BlogText> = {
 };
 
 const newBlogEntries2: BlogEntry[] = [
-  { id: 11, category: 'regulations', date: '2026-09-26', readTime: '4', image: '/img-cat-ilac.jpg', t: newPost11 },
-  { id: 12, category: 'regulations', date: '2026-09-25', readTime: '5', image: '/img-cat-cihaz.jpg', t: newPost12 },
-  { id: 13, category: 'regulations', date: '2026-09-24', readTime: '5', image: '/img-cat-gida.jpg', t: newPost13 },
+  { id: 11, category: 'regulations', date: '2026-09-26', readTime: '4', image: '/blog/11.jpg', t: newPost11 },
+  { id: 12, category: 'regulations', date: '2026-09-25', readTime: '5', image: '/blog/12.jpg', t: newPost12 },
+  { id: 13, category: 'regulations', date: '2026-09-24', readTime: '5', image: '/blog/13.jpg', t: newPost13 },
 ];
 
 // Yeni, doğrulanmış kaynaklı istatistik/trend makaleleri (Ekim 2026). Tüm rakamlar resmi veya güvenilir kaynaklarla teyit edildi.
@@ -619,10 +619,10 @@ const newPost17: Record<Lang, BlogText> = {
 };
 
 const newBlogEntries3: BlogEntry[] = [
-  { id: 14, category: 'stats', date: '2026-10-03', readTime: '5', image: '/img-cat-ilac.jpg', t: newPost14 },
-  { id: 15, category: 'stats', date: '2026-10-02', readTime: '5', image: '/img-cat-sarf.jpg', t: newPost15 },
-  { id: 16, category: 'trends', date: '2026-09-30', readTime: '5', image: '/img-cat-test.jpg', t: newPost16 },
-  { id: 17, category: 'trends', date: '2026-09-29', readTime: '5', image: '/img-cat-cihaz.jpg', t: newPost17 },
+  { id: 14, category: 'stats', date: '2026-10-03', readTime: '5', image: '/blog/14.jpg', t: newPost14 },
+  { id: 15, category: 'stats', date: '2026-10-02', readTime: '5', image: '/blog/15.jpg', t: newPost15 },
+  { id: 16, category: 'trends', date: '2026-09-30', readTime: '5', image: '/blog/16.jpg', t: newPost16 },
+  { id: 17, category: 'trends', date: '2026-09-29', readTime: '5', image: '/blog/17.jpg', t: newPost17 },
 ];
 
 const newPost18: Record<Lang, BlogText> = {
@@ -858,10 +858,10 @@ const newPost21: Record<Lang, BlogText> = {
 };
 
 const newBlogEntries4: BlogEntry[] = [
-  { id: 18, category: 'regulations', date: '2026-10-11', readTime: '6', image: '/img-cat-ilac.jpg', t: newPost18 },
-  { id: 19, category: 'regulations', date: '2026-10-12', readTime: '6', image: '/img-cat-cihaz.jpg', t: newPost19 },
-  { id: 20, category: 'regulations', date: '2026-10-13', readTime: '6', image: '/img-cat-sarf.jpg', t: newPost20 },
-  { id: 21, category: 'regulations', date: '2026-10-14', readTime: '6', image: '/img-cat-ilac.jpg', t: newPost21 },
+  { id: 18, category: 'regulations', date: '2026-10-11', readTime: '6', image: '/blog/18.jpg', t: newPost18 },
+  { id: 19, category: 'regulations', date: '2026-10-12', readTime: '6', image: '/blog/19.jpg', t: newPost19 },
+  { id: 20, category: 'regulations', date: '2026-10-13', readTime: '6', image: '/blog/20.jpg', t: newPost20 },
+  { id: 21, category: 'regulations', date: '2026-10-14', readTime: '6', image: '/blog/21.jpg', t: newPost21 },
 ];
 
 const newPost22: Record<Lang, BlogText> = {
@@ -1041,8 +1041,8 @@ const newPost23: Record<Lang, BlogText> = {
 };
 
 const newBlogEntries5: BlogEntry[] = [
-  { id: 22, category: 'stats', date: '2026-10-14', readTime: '9', image: '/img-cat-ilac.jpg', t: newPost22 },
-  { id: 23, category: 'trends', date: '2026-10-14', readTime: '8', image: '/img-cat-test.jpg', t: newPost23 },
+  { id: 22, category: 'stats', date: '2026-10-14', readTime: '9', image: '/blog/22.jpg', t: newPost22 },
+  { id: 23, category: 'trends', date: '2026-10-14', readTime: '8', image: '/blog/23.jpg', t: newPost23 },
 ];
 
 const newPost24: Record<Lang, BlogText> = {
@@ -1108,7 +1108,7 @@ const newPost24: Record<Lang, BlogText> = {
   ] },
 };
 const newBlogEntries6: BlogEntry[] = [
-  { id: 24, category: 'stats', date: '2026-10-15', readTime: '9', image: '/img-cat-ilac.jpg', t: newPost24 },
+  { id: 24, category: 'stats', date: '2026-10-15', readTime: '9', image: '/blog/24.jpg', t: newPost24 },
 ];
 
 const newPost25: Record<Lang, BlogText> = {
@@ -1304,10 +1304,10 @@ const newPost28: Record<Lang, BlogText> = {
 };
 
 const newBlogEntries7: BlogEntry[] = [
-  { id: 25, category: 'regulations', date: '2026-10-28', readTime: '6', image: '/img-cat-ilac.jpg', t: newPost25 },
-  { id: 26, category: 'regulations', date: '2026-10-27', readTime: '7', image: '/img-cat-sarf.jpg', t: newPost26 },
-  { id: 27, category: 'regulations', date: '2026-10-26', readTime: '7', image: '/img-cat-test.jpg', t: newPost27 },
-  { id: 28, category: 'trends', date: '2026-10-25', readTime: '6', image: '/img-cat-cihaz.jpg', t: newPost28 },
+  { id: 25, category: 'regulations', date: '2026-10-28', readTime: '6', image: '/blog/25.jpg', t: newPost25 },
+  { id: 26, category: 'regulations', date: '2026-10-27', readTime: '7', image: '/blog/26.jpg', t: newPost26 },
+  { id: 27, category: 'regulations', date: '2026-10-26', readTime: '7', image: '/blog/27.jpg', t: newPost27 },
+  { id: 28, category: 'trends', date: '2026-10-25', readTime: '6', image: '/blog/28.jpg', t: newPost28 },
 ];
 
 const newPost29: Record<Lang, BlogText> = {
@@ -1379,7 +1379,7 @@ const newPost29: Record<Lang, BlogText> = {
 };
 
 const newBlogEntries8: BlogEntry[] = [
-  { id: 29, category: 'trends', date: '2026-10-28', readTime: '5', image: '/img-cat-ilac.jpg', t: newPost29 },
+  { id: 29, category: 'trends', date: '2026-10-28', readTime: '5', image: '/blog/29.jpg', t: newPost29 },
 ];
 
 export const newBlogEntries: BlogEntry[] = [
@@ -1390,8 +1390,8 @@ export const newBlogEntries: BlogEntry[] = [
   ...newBlogEntries4,
   ...newBlogEntries3,
   ...newBlogEntries2,
-  { id: 7, category: 'regulations', date: '2026-09-24', readTime: '5', image: '/img-cat-ilac.jpg', t: newPost1 },
-  { id: 8, category: 'trends', date: '2026-09-18', readTime: '4', image: '/img-cat-cihaz.jpg', t: newPost2 },
-  { id: 9, category: 'regulations', date: '2026-09-12', readTime: '4', image: '/img-cat-test.jpg', t: newPost3 },
-  { id: 10, category: 'stats', date: '2026-09-06', readTime: '4', image: '/img-cat-sarf.jpg', t: newPost4 },
+  { id: 7, category: 'regulations', date: '2026-09-24', readTime: '5', image: '/blog/7.jpg', t: newPost1 },
+  { id: 8, category: 'trends', date: '2026-09-18', readTime: '4', image: '/blog/8.jpg', t: newPost2 },
+  { id: 9, category: 'regulations', date: '2026-09-12', readTime: '4', image: '/blog/9.jpg', t: newPost3 },
+  { id: 10, category: 'stats', date: '2026-09-06', readTime: '4', image: '/blog/10.jpg', t: newPost4 },
 ];

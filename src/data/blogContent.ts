@@ -336,12 +336,12 @@ const kzEaeu: Record<Lang, BlogText> = {
 };
 
 export const baseBlogEntries: BlogEntry[] = [
-  { id: 1, category: 'regulations', date: '2026-06-15', readTime: '5', image: '/img-cat-ilac.jpg', t: trPricing },
-  { id: 2, category: 'regulations', date: '2026-06-05', readTime: '5', image: '/img-cat-sarf.jpg', t: trGdp },
-  { id: 3, category: 'regulations', date: '2026-05-28', readTime: '5', image: '/img-cat-cihaz.jpg', t: trIts },
-  { id: 4, category: 'regulations', date: '2026-05-20', readTime: '6', image: '/img-cat-gida.jpg', t: azReg },
-  { id: 5, category: 'trends', date: '2026-05-10', readTime: '5', image: '/img-cat-test.jpg', t: azDvtis },
-  { id: 6, category: 'regulations', date: '2026-06-25', readTime: '7', image: '/img-cat-bebek.jpg', t: kzEaeu },
+  { id: 1, category: 'regulations', date: '2026-06-15', readTime: '5', image: '/blog/1.jpg', t: trPricing },
+  { id: 2, category: 'regulations', date: '2026-06-05', readTime: '5', image: '/blog/2.jpg', t: trGdp },
+  { id: 3, category: 'regulations', date: '2026-05-28', readTime: '5', image: '/blog/3.jpg', t: trIts },
+  { id: 4, category: 'regulations', date: '2026-05-20', readTime: '6', image: '/blog/4.jpg', t: azReg },
+  { id: 5, category: 'trends', date: '2026-05-10', readTime: '5', image: '/blog/5.jpg', t: azDvtis },
+  { id: 6, category: 'regulations', date: '2026-06-25', readTime: '7', image: '/blog/6.jpg', t: kzEaeu },
 ];
 
 // Yeni makaleler ayrı dosyada tutulur (blogNew.ts); en yeni tarih en üstte görünür.
