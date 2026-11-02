@@ -29,4 +29,5 @@ export const blogImageCredits: Record<number, { author: string; license: string;
   27: { author: 'Clemenspool', license: 'CC0', url: 'https://commons.wikimedia.org/wiki/File:Reinraum_BBS_Automation_Blaichach.jpg' },
   28: { author: 'Hey Paul from Sacramento, CA, USA', license: 'CC BY 2.0', url: 'https://commons.wikimedia.org/wiki/File:Gas_Chromatography_Laboratory.jpg' },
   29: { author: 'BayAygun', license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Pirallahi_k%C3%B6rp%C3%BCs%C3%BC.jpg' },
+  30: { author: 'Epolk', license: 'CC BY-SA 4.0', url: 'https://commons.wikimedia.org/wiki/File:Vial_caps.jpg' },
 };
